@@ -68,7 +68,7 @@
       cron:
         name: ansible-pull
         cron_file: ansible-pull
-        user: '{{ cron_user }}'
+        user: '{{cron_user}}'
         minute: '*/15'
         job: 'ansible-pull -d {{workdir}} -U {{repo_url}} {{playbook}}.yml >> {{logfile}} 2>&1'
 
