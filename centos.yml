@@ -41,3 +41,10 @@
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.local
     force: no
+- name: Change fail2ban backend config
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'backend = systemd'
+    regexp: '^backend = (systemd|auto)'
