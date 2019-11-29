@@ -48,3 +48,14 @@
     state: present
     line: 'backend = systemd'
     regexp: '^backend = (systemd|auto)'
+- name: Install ntp
+  package:
+    name: ntp
+    state: latest
+- name: Enable ntpd
+  systemd:
+    name: ntpd
+    state: started
+    enabled: yes
+    masked: no
+    
