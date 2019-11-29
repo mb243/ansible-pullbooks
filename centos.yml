@@ -5,6 +5,10 @@
   package:
     name: yum-cron
     state: latest
+- name: Install epel-release
+  package:
+    name: epel-release
+    state: latest
 - name: Disable SSH Password Authentication
   lineinfile:
     backup: yes
