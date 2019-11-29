@@ -41,3 +41,9 @@
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.local
     force: no
+- name: Enable systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+    masked: no
