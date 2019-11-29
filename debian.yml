@@ -2,7 +2,7 @@
   debug:
     msg: In debian.yml
 - name: Configure automatic updates (unattended-upgrades)
-  apt:
+  package:
     name: unattended-upgrades
     state: latest
 - name: Configure automatic updates (20auto-upgrades)

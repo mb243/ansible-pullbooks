@@ -1,5 +1,5 @@
 - name: Configure automatic updates (yum-cron)
-  yum:
+  package:
     name: yum-cron
     state: latest
 - name: Disable SSH Password Authentication
