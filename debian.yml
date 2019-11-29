@@ -1,6 +1,10 @@
 - name: Announce playbook
   debug:
     msg: In debian.yml
+- name: Update all packages
+  package:
+    name: '*'
+    state: latest
 - name: Configure automatic updates (unattended-upgrades)
   package:
     name: unattended-upgrades

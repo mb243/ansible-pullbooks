@@ -1,6 +1,10 @@
 - name: Announce playbook
   debug:
     msg: In centos.yml
+- name: Update all packages
+  package:
+    name: '*'
+    state: latest
 - name: Configure automatic updates (yum-cron)
   package:
     name: yum-cron
