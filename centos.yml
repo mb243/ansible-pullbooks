@@ -1,0 +1,18 @@
+- name: Configure automatic updates (yum-cron)
+  yum:
+    name: yum-cron
+    state: latest
+- name: Disable SSH Password Authentication
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PasswordAuthentication no'
+    regexp: '^\#?PasswordAuthentication (yes|no)'
+- name: Disable root logins
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PermitRootLogin no'
+    regexp: '^\#?PermitRootLogin (yes|no)'
