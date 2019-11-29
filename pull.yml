@@ -1,0 +1,88 @@
+# ansible-pull setup
+# Based on the ansible-pull script found here: 
+# https://github.com/ansible/ansible-examples/blob/master/language_features/ansible_pull.yml
+
+# on remote hosts, set up ansible to run periodically using the latest code
+# from a particular checkout, in pull based fashion, inverting Ansible's
+# usual push-based operating mode.
+#
+# This particular pull based mode is ideal for:
+# (A) massive scale out
+# (B) continual system remediation
+#
+# DO NOT RUN THIS AGAINST YOUR HOSTS WITHOUT CHANGING THE repo_url
+# TO SOMETHING YOU HAVE PERSONALLY VERIFIED
+#
+# If a host inventory file hasn't been configured, this playbook
+# can be run one-off with the following syntax:
+
+# ansible-playbook pull.yml -i $remote-IP,
+# Optionally ANSIBLE_HOST_KEY_CHECKING=False to ignore host keys
+
+- hosts: all
+  remote_user: root
+
+  vars:
+
+    # User to run ansible-pull as from cron
+    cron_user: root
+
+    # File that ansible will use for logs
+    logfile: /var/log/ansible-pull.log
+
+    # Directory to where repository will be cloned
+    workdir: /var/lib/ansible/local
+
+    # Repository to check out -- YOU MUST CHANGE THIS
+    repo_url: https://github.com/mb243/ansible-playbooks.git
+
+    # Playbook to run. Will be included in cron.
+    playbook: playbook.yml
+
+  tasks:
+
+    # CentOS / RHEL source Ansible from the EPEL repo
+    - name: Install epel-release
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+      package:
+        name: epel-release
+        state: latest
+    - name: Install ansible
+      package: 
+        name: ansible 
+        state: latest
+    - name: Install git
+      package:
+        name: git
+        state: latest
+
+    - name: Create local directory to work from
+      file:
+        path: '{{workdir}}'
+        state: directory
+        owner: root
+        group: root
+        mode: 0751
+
+    - name: Create crontab entry to clone/pull git repo
+      cron:
+        name: ansible-pull
+        cron_file: ansible-pull
+        user: '{{ cron_user }}'
+        minute: '*/15'
+        job: 'ansible-pull -d {{workdir}} -U {{repo_url}} {{playbook}}.yml >> {{logfile}} 2>&1'
+
+    - name: Create logrotate entry for ansible-pull.log
+      copy:
+        dest: /etc/logrotate.d/ansible-pull
+        owner: root
+        group: root
+        mode: 0644
+        content: |
+          {{logfile}} {
+            rotate 7
+            daily
+            compress
+            missingok
+            notifempty
+          }
