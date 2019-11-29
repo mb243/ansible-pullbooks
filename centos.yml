@@ -1,3 +1,6 @@
+- name: Announce playbook
+  debug:
+    msg: In centos.yml
 - name: Configure automatic updates (yum-cron)
   package:
     name: yum-cron
