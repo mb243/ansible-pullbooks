@@ -31,6 +31,11 @@
     state: present
     line: 'PermitRootLogin no'
     regexp: '^\#?PermitRootLogin (yes|no)'
+- name: Restart SSH daemon
+  systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: yes
 - name: Install fail2ban
   package:
     name: fail2ban
