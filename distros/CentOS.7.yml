@@ -21,7 +21,7 @@
     state: present
     line: 'PasswordAuthentication no'
     regexp: '^\#?PasswordAuthentication (yes|no)'
-- name: Disable root logins
+- name: Allow root logins
   lineinfile:
     backup: yes
     path: /etc/ssh/sshd_config
