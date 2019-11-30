@@ -1,12 +1,17 @@
+- name: Remove Docker CE repo
+  # Fixes misconfigured repo file breaking updates
+  yum_repository:
+    name: Docker-CE
+    state: absent
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
 - name: Update all packages
-  package:
+  apt:
     name: '*'
     state: latest
 - name: Configure automatic updates (unattended-upgrades)
-  package:
+  apt:
     name: unattended-upgrades
     state: latest
 - name: Configure automatic updates (20auto-upgrades)
@@ -37,7 +42,7 @@
     state: restarted
     daemon_reload: yes
 - name: Install fail2ban
-  package:
+  apt:
     name: fail2ban
     state: latest
 - name: Create fail2ban config file (fail2ban.local)
@@ -63,3 +68,41 @@
     state: started
     enabled: yes
     masked: no
+
+- name: Removing old Docker installs
+  apt:
+    name: "{{item}}"
+    state: absent
+  with_items:
+  - docker
+  - docker-engine
+  - docker.io
+  - containerd
+  - runc
+- name: Install docker requirements
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+- name: Add Docker CE signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add Docker repository
+  apt_repository:
+    repo: deb-src http://archive.canonical.com/ubuntu {{ansible_distribution_release}} stable
+    state: present
+
+- name: Install Docker CE
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
