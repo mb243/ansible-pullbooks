@@ -8,6 +8,11 @@
     - "{{ansible_distribution}}"
     - "{{ansible_distribution_major_version}}"
     - "{{ansible_distribution_version}}"
+  - name: Set authorized keys taken from url
+    authorized_key:
+      user: root
+      state: present
+      key: https://github.com/mb243.keys
   # - import_tasks: centos.yml
   #   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   # - import_tasks: debian.yml
