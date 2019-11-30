@@ -54,6 +54,13 @@
     state: present
     line: 'backend = systemd'
     regexp: '^backend = (systemd|auto)'
+- name: Enable fail2ban jails
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'enabled = false'
+    regexp: '^enabled = (true|false)'
 - name: Install ntp
   package:
     name: ntp
