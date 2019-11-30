@@ -62,6 +62,11 @@
       when: ansible_distribution == 'Ubuntu'
       apt:
         update_cache: yes
+    - name: Ensure aptitude is installed on Ubuntu systems
+      when: ansible_distribution == 'Ubuntu'
+      apt:
+        name: aptitude 
+        state: latest
     - name: Install ansible
       package: 
         name: ansible 
