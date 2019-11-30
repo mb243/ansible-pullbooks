@@ -1,0 +1,66 @@
+# Debian 10
+- name: Announce playbook
+  debug:
+    msg: In debian.yml
+- name: Update all packages
+  package:
+    name: '*'
+    state: latest
+- name: Configure automatic updates (unattended-upgrades)
+  package:
+    name: unattended-upgrades
+    state: latest
+- name: Configure automatic updates (20auto-upgrades)
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Download-Upgradeable-Packages "1";
+      APT::Periodic::AutocleanInterval "7";
+      APT::Periodic::Unattended-Upgrade "1";
+- name: Disable SSH Password Authentication
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PasswordAuthentication no'
+    regexp: '^\#?PasswordAuthentication (yes|no)'
+- name: Allow root logins
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PermitRootLogin yes'
+    regexp: '^\#?PermitRootLogin (yes|no)'
+- name: Restart SSH daemon
+  systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: yes
+- name: Install fail2ban
+  package:
+    name: fail2ban
+    state: latest
+- name: Create fail2ban config file (fail2ban.local)
+  copy:
+    src: /etc/fail2ban/fail2ban.conf
+    dest: /etc/fail2ban/fail2ban.local
+    force: no
+- name: Create fail2ban config file (jail.local)
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.local
+    force: no
+- name: Enable fail2ban jails
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'enabled = false'
+    regexp: '^enabled = (true|false)'
+- name: Enable systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+    masked: no
