@@ -98,7 +98,7 @@
   yum_repository:
     name: Docker-CE
     description: Docker CE Repo
-    include: https://download.docker.com/linux/centos/docker-ce.repo
+    mirrorlist: https://download.docker.com/linux/centos/docker-ce.repo
     gpgkey: https://download.docker.com/linux/centos/gpg
 - name: Install Docker CE
   package:
