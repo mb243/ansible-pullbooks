@@ -70,7 +70,7 @@
         cron_file: ansible-pull
         user: '{{cron_user}}'
         minute: '*/15'
-        job: 'ansible-pull -d {{workdir}} -U {{repo_url}} {{playbook}}.yml >> {{logfile}} 2>&1'
+        job: 'ansible-pull -d {{workdir}} -U {{repo_url}} {{playbook}} >> {{logfile}} 2>&1'
 
     - name: Create logrotate entry for ansible-pull.log
       copy:
