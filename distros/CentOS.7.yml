@@ -94,9 +94,7 @@
     name: Docker-CE
     description: Docker CE Repo
     include: https://download.docker.com/linux/centos/docker-ce.repo
-- name: Update yum cache
-  yum:
-    update_cache: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
 - name: Install Docker CE
   package:
     name: "{{item}}"
