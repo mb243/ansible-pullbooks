@@ -84,7 +84,7 @@
   yum_repository:
     name: Docker-CE
     description: Docker CE Repo
-    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+    baseurl: "https://download.docker.com/linux/centos/docker-ce.repo"
 - name: Update yum cache
   yum:
     update_cache: yes
