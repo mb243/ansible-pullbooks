@@ -1,3 +1,4 @@
+# Debian 10
 - name: Announce playbook
   debug:
     msg: In debian.yml
@@ -24,12 +25,12 @@
     state: present
     line: 'PasswordAuthentication no'
     regexp: '^\#?PasswordAuthentication (yes|no)'
-- name: Disable root logins
+- name: Allow root logins
   lineinfile:
     backup: yes
     path: /etc/ssh/sshd_config
     state: present
-    line: 'PermitRootLogin no'
+    line: 'PermitRootLogin yes'
     regexp: '^\#?PermitRootLogin (yes|no)'
 - name: Restart SSH daemon
   systemd:
@@ -50,6 +51,13 @@
     src: /etc/fail2ban/jail.conf
     dest: /etc/fail2ban/jail.local
     force: no
+- name: Enable fail2ban jails
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'enabled = false'
+    regexp: '^enabled = (true|false)'
 - name: Enable systemd-timesyncd
   systemd:
     name: systemd-timesyncd
