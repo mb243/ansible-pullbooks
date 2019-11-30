@@ -1,8 +1,8 @@
-- name: Remove Docker CE repo
-  # Fixes misconfigured repo file breaking updates
-  apt_repository:
-    name: docker-ce
-    state: absent
+# - name: Remove Docker CE repo
+#   # Fixes misconfigured repo file breaking updates
+#   apt_repository:
+#     repo: docker-ce
+#     state: absent
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
