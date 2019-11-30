@@ -1,7 +1,7 @@
 - name: Remove Docker CE repo
   # Fixes misconfigured repo file breaking updates
-  yum_repository:
-    name: Docker-CE
+  apt_repository:
+    name: docker-ce
     state: absent
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
