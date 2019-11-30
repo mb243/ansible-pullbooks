@@ -2,8 +2,8 @@
   gather_facts: yes
   become: false
   vars:
-    a: {{ansible_distribution}}
-    b: {{ansible_distribution_major_version}}
+    a: "{{ansible_distribution}}"
+    b: "{{ansible_distribution_major_version}}"
   tasks:
   - name: System details
     debug: msg="{{item}}"
