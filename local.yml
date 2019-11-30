@@ -20,4 +20,4 @@
   #   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   # - import_tasks: debian.yml
   #   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-  - import_tasks: "distros/{{a}}.{{b}}.yml"
+  - include_tasks: "distros/{{a}}.{{b}}.yml"
