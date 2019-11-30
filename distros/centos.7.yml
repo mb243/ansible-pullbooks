@@ -25,7 +25,7 @@
     backup: yes
     path: /etc/ssh/sshd_config
     state: present
-    line: 'PermitRootLogin no'
+    line: 'PermitRootLogin yes'
     regexp: '^\#?PermitRootLogin (yes|no)'
 - name: Restart SSH daemon
   systemd:

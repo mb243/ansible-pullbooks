@@ -37,7 +37,7 @@
     repo_url: https://github.com/mb243/ansible-playbooks.git
 
     # Playbook to run. Will be included in cron.
-    playbook: playbook.yml
+    playbook: local.yml
 
   tasks:
 
