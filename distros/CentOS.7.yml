@@ -71,3 +71,25 @@
     state: started
     enabled: yes
     masked: no
+
+- name: Install docker requirements
+  package:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+- name: Add Docker repository
+  yum_repository:
+    name: Docker-CE
+    description: Docker CE Repo
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+- name: Install Docker CE
+  package:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
