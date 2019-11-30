@@ -67,6 +67,11 @@
       apt:
         name: aptitude 
         state: latest
+    - name: Install selinux python bindings for Fedora family systems
+      when: ansible_distribution == 'Fedora'
+      package:
+        name: libselinux-python
+        state: latest
     - name: Install ansible
       package: 
         name: ansible 
