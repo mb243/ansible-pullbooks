@@ -1,7 +1,3 @@
-# Debian 10
-- name: Announce playbook
-  debug:
-    msg: In debian.yml
 - name: Update all packages
   package:
     name: '*'

@@ -1,7 +1,3 @@
-# CentOS 7
-- name: Announce playbook
-  debug:
-    msg: In centos.yml
 - name: Update all packages
   package:
     name: '*'

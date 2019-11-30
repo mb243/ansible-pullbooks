@@ -1,7 +1,3 @@
-# Debian 10
-- name: Announce playbook
-  debug:
-    msg: In debian.yml
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
