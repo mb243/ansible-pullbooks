@@ -93,7 +93,7 @@
   yum_repository:
     name: Docker-CE
     description: Docker CE Repo
-    metalink: https://download.docker.com/linux/centos/docker-ce.repo
+    include: https://download.docker.com/linux/centos/docker-ce.repo
 - name: Update yum cache
   yum:
     update_cache: yes
