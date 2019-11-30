@@ -68,6 +68,19 @@
     enabled: yes
     masked: no
 
+- name: Removing old Docker installs
+  package:
+    name: "{{item}}"
+    state: absent
+  with_items:
+  - docker
+  - docker-client
+  - docker-client-latest
+  - docker-common
+  - docker-latest
+  - docker-latest-logrotate
+  - docker-logrotate
+  - docker-engine
 - name: Install docker requirements
   package:
     name: "{{item}}"
@@ -80,7 +93,7 @@
   yum_repository:
     name: Docker-CE
     description: Docker CE Repo
-    baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+    metalink: https://download.docker.com/linux/centos/docker-ce.repo
 - name: Update yum cache
   yum:
     update_cache: yes
