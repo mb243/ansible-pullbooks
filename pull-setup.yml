@@ -34,7 +34,7 @@
     workdir: /var/lib/ansible/local
 
     # Repository to check out -- YOU MUST CHANGE THIS
-    repo_url: https://github.com/mb243/ansible-playbooks.git
+    repo_url: https://github.com/mb243/ansible-pullbooks.git
 
     # Playbook to run. Will be included in cron.
     playbook: local.yml
