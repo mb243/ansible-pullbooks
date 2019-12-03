@@ -89,17 +89,17 @@
   - yum-utils
   - device-mapper-persistent-data
   - lvm2
-- name: Add Docker repository
-  yum_repository:
-    name: Docker-CE
-    description: Docker CE Repo
-    mirrorlist: https://download.docker.com/linux/centos/docker-ce.repo
-    gpgkey: https://download.docker.com/linux/centos/gpg
-- name: Install Docker CE
-  package:
-    name: "{{item}}"
-    state: latest
-  with_items:
-  - docker-ce
-  - docker-ce-cli
-  - containerd.io
+# - name: Add Docker repository
+#   yum_repository:
+#     name: Docker-CE
+#     description: Docker CE Repo
+#     mirrorlist: https://download.docker.com/linux/centos/docker-ce.repo
+#     gpgkey: https://download.docker.com/linux/centos/gpg
+# - name: Install Docker CE
+#   package:
+#     name: "{{item}}"
+#     state: latest
+#   with_items:
+#   - docker-ce
+#   - docker-ce-cli
+#   - containerd.io
