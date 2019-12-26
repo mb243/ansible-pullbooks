@@ -112,3 +112,9 @@
     state: started
     enabled: yes
     masked: no
+- name: Open firewall for cockpit
+  firewalld:
+    service: cockpit
+    state: enabled
+    permanent: yes
+    immediate: yes
