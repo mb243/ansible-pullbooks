@@ -101,3 +101,14 @@
   - docker-ce
   - docker-ce-cli
   - containerd.io
+
+- name: Install cockpit
+  package:
+    name: cockpit
+    state: present
+- name: Start cockpit
+  systemd:
+    name: cockpit
+    state: started
+    enabled: yes
+    masked: no
