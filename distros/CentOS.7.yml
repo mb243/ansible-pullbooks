@@ -5,11 +5,11 @@
 - name: Configure automatic updates (yum-cron)
   package:
     name: yum-cron
-    state: latest
+    state: present
 - name: Install epel-release
   package:
     name: epel-release
-    state: latest
+    state: present
 - name: Disable SSH Password Authentication
   lineinfile:
     backup: yes
@@ -32,7 +32,7 @@
 - name: Install fail2ban
   package:
     name: fail2ban
-    state: latest
+    state: present
 - name: Create fail2ban config file (fail2ban.local)
   copy:
     src: /etc/fail2ban/fail2ban.conf
@@ -60,7 +60,7 @@
 - name: Install ntp
   package:
     name: ntp
-    state: latest
+    state: present
 - name: Enable ntpd
   systemd:
     name: ntpd
@@ -84,7 +84,7 @@
 - name: Install docker requirements
   package:
     name: "{{item}}"
-    state: latest
+    state: present
   with_items:
   - yum-utils
   - device-mapper-persistent-data
@@ -96,7 +96,7 @@
 - name: Install Docker CE
   package:
     name: "{{item}}"
-    state: latest
+    state: present
   with_items:
   - docker-ce
   - docker-ce-cli
