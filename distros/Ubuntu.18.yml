@@ -13,7 +13,7 @@
 - name: Configure automatic updates (unattended-upgrades)
   apt:
     name: unattended-upgrades
-    state: latest
+    state: present
 - name: Configure automatic updates (20auto-upgrades)
   copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
@@ -44,7 +44,7 @@
 - name: Install fail2ban
   apt:
     name: fail2ban
-    state: latest
+    state: present
 - name: Create fail2ban config file (fail2ban.local)
   copy:
     src: /etc/fail2ban/fail2ban.conf
@@ -101,7 +101,7 @@
 - name: Install Docker CE
   apt:
     name: "{{item}}"
-    state: latest
+    state: present
   with_items:
   - docker-ce
   - docker-ce-cli
