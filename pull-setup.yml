@@ -44,8 +44,7 @@
       debug: msg="{{item}}"
       with_items: 
       - "{{ansible_distribution}}"
-      - "{{ansible_distribution_major_version}}"
-      # - "{{ansible_distribution_version}}"
+      - "{{ansible_distribution_version}}"
 
     # CentOS / RHEL source Ansible from the EPEL repo
     - name: Install epel-release for CentOS-family distros
