@@ -3,7 +3,7 @@
   become: false
   vars:
     a: "{{ansible_distribution}}"
-    b: "{{ansible_distribution_major_version}}"
+    b: "{{ansible_distribution_version}}"
   tasks:
   - name: System details
     debug: msg="{{item}}"
