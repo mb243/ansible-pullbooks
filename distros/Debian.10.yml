@@ -5,7 +5,7 @@
 - name: Configure automatic updates (unattended-upgrades)
   package:
     name: unattended-upgrades
-    state: latest
+    state: present
 - name: Configure automatic updates (20auto-upgrades)
   copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
@@ -36,7 +36,7 @@
 - name: Install fail2ban
   package:
     name: fail2ban
-    state: latest
+    state: present
 - name: Create fail2ban config file (fail2ban.local)
   copy:
     src: /etc/fail2ban/fail2ban.conf
