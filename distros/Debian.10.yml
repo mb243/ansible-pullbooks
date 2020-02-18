@@ -1,3 +1,6 @@
+- name: Run the equivalent of "apt-get update"
+  apt:
+    update_cache: yes
 - name: Update all packages
   package:
     name: '*'
