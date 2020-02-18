@@ -1,0 +1,120 @@
+- name: Update all packages
+  package:
+    name: '*'
+    state: latest
+- name: Configure automatic updates (yum-cron)
+  package:
+    name: yum-cron
+    state: present
+- name: Install epel-release
+  package:
+    name: epel-release
+    state: present
+- name: Disable SSH Password Authentication
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PasswordAuthentication no'
+    regexp: '^\#?PasswordAuthentication (yes|no)'
+- name: Allow root logins
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PermitRootLogin yes'
+    regexp: '^\#?PermitRootLogin (yes|no)'
+- name: Restart SSH daemon
+  systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: yes
+- name: Install fail2ban
+  package:
+    name: fail2ban
+    state: present
+- name: Create fail2ban config file (fail2ban.local)
+  copy:
+    src: /etc/fail2ban/fail2ban.conf
+    dest: /etc/fail2ban/fail2ban.local
+    force: no
+- name: Create fail2ban config file (jail.local)
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.local
+    force: no
+- name: Change fail2ban backend config
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'backend = systemd'
+    regexp: '^backend = (systemd|auto)'
+- name: Enable fail2ban jails
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'enabled = false'
+    regexp: '^enabled = (true|false)'
+- name: Install ntp
+  package:
+    name: ntp
+    state: present
+- name: Enable ntpd
+  systemd:
+    name: ntpd
+    state: started
+    enabled: yes
+    masked: no
+
+- name: Removing old Docker installs
+  package:
+    name: "{{item}}"
+    state: absent
+  with_items:
+  - docker
+  - docker-client
+  - docker-client-latest
+  - docker-common
+  - docker-latest
+  - docker-latest-logrotate
+  - docker-logrotate
+  - docker-engine
+- name: Install docker requirements
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+- name: Add Docker repository
+  command:
+    cmd: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    creates: /etc/yum.repos.d/docker-ce.repo
+- name: Install Docker CE
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+- name: Install cockpit
+  package:
+    name: cockpit
+    state: present
+- name: Start cockpit
+  systemd:
+    name: cockpit
+    state: started
+    enabled: yes
+    masked: no
+- name: Open firewall for cockpit
+  firewalld:
+    service: cockpit
+    state: enabled
+    permanent: yes
+    immediate: yes
