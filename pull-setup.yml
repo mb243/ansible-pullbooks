@@ -52,12 +52,12 @@
       package:
         name: epel-release
         state: present
-    - name: Run the equivalent of "apt-get update" as a separate step for Ubuntu and Debian
+    - name: Run the equivalent of "apt-get update" for Ubuntu and Debian
       when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       apt:
         update_cache: yes
-    - name: Ensure aptitude is installed on Ubuntu systems
-      when: ansible_distribution == 'Ubuntu'
+    - name: Ensure aptitude is installed on Ubuntu and Debian systems
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       apt:
         name: aptitude 
         state: present
