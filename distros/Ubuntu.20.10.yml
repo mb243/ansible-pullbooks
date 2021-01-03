@@ -1,0 +1,129 @@
+# - name: Remove Docker CE repo
+#   # Fixes misconfigured repo file breaking updates
+#   apt_repository:
+#     repo: docker-ce
+#     state: absent
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+- name: Update all packages
+  apt:
+    name: '*'
+    state: latest
+- name: Configure automatic updates (unattended-upgrades)
+  apt:
+    name: unattended-upgrades
+    state: present
+- name: Configure automatic updates (20auto-upgrades)
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Download-Upgradeable-Packages "1";
+      APT::Periodic::AutocleanInterval "7";
+      APT::Periodic::Unattended-Upgrade "1";
+- name: Disable SSH Password Authentication
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PasswordAuthentication no'
+    regexp: '^\#?PasswordAuthentication (yes|no)'
+- name: Allow root logins
+  lineinfile:
+    backup: yes
+    path: /etc/ssh/sshd_config
+    state: present
+    line: 'PermitRootLogin yes'
+    regexp: '^\#?PermitRootLogin (yes|no)'
+- name: Restart SSH daemon
+  systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: yes
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: present
+- name: Create fail2ban config file (fail2ban.local)
+  copy:
+    src: /etc/fail2ban/fail2ban.conf
+    dest: /etc/fail2ban/fail2ban.local
+    force: no
+- name: Create fail2ban config file (jail.local)
+  copy:
+    src: /etc/fail2ban/jail.conf
+    dest: /etc/fail2ban/jail.local
+    force: no
+- name: Enable fail2ban jails
+  lineinfile:
+    backup: yes
+    path: /etc/fail2ban/jail.local
+    state: present
+    line: 'enabled = false'
+    regexp: '^enabled = (true|false)'
+- name: Enable systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+    masked: no
+
+- name: Install additional software development dependencies
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - binutils
+  - git
+  - gnupg2
+  - libc6-dev
+  - libcurl4
+  - libedit2
+  - libgcc-9-dev
+  - libpython2.7
+  - libsqlite3-0
+  - libstdc++-9-dev
+  - libxml2
+  - libz3-dev
+  - pkg-config
+  - tzdata
+  - zlib1g-dev
+
+- name: Removing old Docker installs
+  package:
+    name: "{{item}}"
+    state: absent
+  with_items:
+  - docker
+  - docker-engine
+  - docker.io
+  - containerd
+  - runc
+- name: Install docker requirements
+  package:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+- name: Add Docker CE signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    state: present
+
+- name: Install Docker CE
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
