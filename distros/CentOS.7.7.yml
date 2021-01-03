@@ -68,6 +68,31 @@
     enabled: yes
     masked: no
 
+- name: Install additional software development dependencies
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - binutils
+  - gcc
+  - git
+  - glibc-static
+  - libbsd-devel
+  - libedit
+  - libedit-devel
+  - libicu-devel
+  - libstdc++-static
+  - pkgconfig
+  - python2
+  - sqlite
+
+- name: Update unistd.h to use __libc_block
+  replace:
+    backup: yes
+    path: /usr/include/unistd.h
+    replace: '__libc_block'
+    regexp: '__block'
+
 - name: Removing old Docker installs
   package:
     name: "{{item}}"

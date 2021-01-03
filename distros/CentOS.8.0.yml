@@ -68,6 +68,24 @@
     enabled: yes
     masked: no
 
+- name: Install additional software development dependencies
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - binutils
+  - gcc
+  - git
+  - glibc-static
+  - libbsd-devel
+  - libedit
+  - libedit-devel
+  - libicu-devel
+  - libstdc++-static
+  - pkg-config
+  - python2
+  - sqlite
+
 - name: Removing old Docker installs
   package:
     name: "{{item}}"
