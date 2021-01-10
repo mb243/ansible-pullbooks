@@ -45,17 +45,36 @@
       with_items: 
       - "{{ansible_distribution}}"
       - "{{ansible_distribution_version}}"
+      
+    - name: Run the equivalent of "apt-get update" for Ubuntu and Debian
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+      apt:
+        update_cache: yes
 
-    # CentOS / RHEL source Ansible from the EPEL repo
+    # Baseline security configuration
+    - name: Disable SSH Password Authentication
+      lineinfile:
+        backup: yes
+        path: /etc/ssh/sshd_config
+        state: present
+        line: 'PasswordAuthentication no'
+        regexp: '^\#?PasswordAuthentication (yes|no)'
+    - name: Restart SSH daemon
+      systemd:
+        name: sshd
+        state: restarted
+        daemon_reload: yes
+    - name: Update all installed packages
+      package:
+        name: '*'
+        state: latest
+
+    # Install additional things
     - name: Install epel-release for CentOS-family distros
       when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
       package:
         name: epel-release
         state: present
-    - name: Run the equivalent of "apt-get update" for Ubuntu and Debian
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-      apt:
-        update_cache: yes
     - name: Ensure aptitude is installed on Ubuntu and Debian systems
       when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
       apt:
