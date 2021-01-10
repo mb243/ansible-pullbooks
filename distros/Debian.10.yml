@@ -63,3 +63,48 @@
     state: started
     enabled: yes
     masked: no
+
+- name: Install additional software development dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - open-jdk
+
+- name: Removing old Docker installs
+  apt:
+    name: "{{item}}"
+    state: absent
+  with_items:
+  - docker
+  - docker-engine
+  - docker.io
+  - containerd
+  - runc
+- name: Install docker requirements
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+- name: Add Docker CE signing key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+- name: Add Docker repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian {{ansible_distribution_release}} stable
+    state: present
+
+- name: Install Docker CE
+  apt:
+    name: "{{item}}"
+    state: present
+  with_items:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
