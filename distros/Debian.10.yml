@@ -65,14 +65,14 @@
     masked: no
 
 - name: Install additional software development dependencies
-  apt:
+  package:
     name: "{{item}}"
     state: present
   with_items:
   - open-jdk
 
 - name: Removing old Docker installs
-  apt:
+  package:
     name: "{{item}}"
     state: absent
   with_items:
@@ -82,7 +82,7 @@
   - containerd
   - runc
 - name: Install docker requirements
-  apt:
+  package:
     name: "{{item}}"
     state: latest
   with_items:
@@ -101,7 +101,7 @@
     state: present
 
 - name: Install Docker CE
-  apt:
+  package:
     name: "{{item}}"
     state: present
   with_items:
