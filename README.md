@@ -20,6 +20,14 @@ ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook pull-setup.yml -i comma_separat
 
 _NOTE_: If running for a single server, a trailing comma is required.
 
+## Forcing a run
+
+To force a run on a system that has already had the crontab entry install, run the following command:
+
+```
+$(cat /etc/cron.d/ansible-pull | grep git | cut -d\  -f 7-)
+```
+
 ## Testing
 
 - Ensure ansible and git are installed on the test system
