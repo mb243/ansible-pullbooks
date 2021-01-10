@@ -68,7 +68,7 @@
     name: "{{item}}"
     state: present
   with_items:
-  - open-jdk
+  - default-jdk
 
 - name: Removing old Docker installs
   package:
